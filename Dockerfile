@@ -51,10 +51,13 @@ ARG MODEL_TYPE
 WORKDIR /comfyui
 
 # Download checkpoints/vae/LoRA to include in image based on model type
-RUN if [ "$MODEL_TYPE" = "sdxl" ]; then \
-      wget -O models/checkpoints/sd_xl_base_1.0.safetensors https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/resolve/main/sd_xl_base_1.0.safetensors && \
-      wget -O models/vae/sdxl_vae.safetensors https://huggingface.co/stabilityai/sdxl-vae/resolve/main/sdxl_vae.safetensors && \
-      wget -O models/vae/sdxl-vae-fp16-fix.safetensors https://huggingface.co/madebyollin/sdxl-vae-fp16-fix/resolve/main/sdxl_vae.safetensors; \
+RUN if [ "$MODEL_TYPE" = "flux1-dev" ]; then \
+      wget https://huggingface.co/camenduru/FLUX.1-dev/resolve/main/flux1-dev-fp8.safetensors -O models/unet/flux1-dev-fp8.safetensors && \
+      wget https://huggingface.co/camenduru/FLUX.1-dev/resolve/main/ae.sft -O models/vae/ae.sft && \
+      wget https://huggingface.co/camenduru/FLUX.1-dev/resolve/main/clip_l.safetensors -O models/clip/clip_l.safetensors && \
+      wget https://huggingface.co/camenduru/FLUX.1-dev/resolve/main/t5xxl_fp8_e4m3fn.safetensors -O models/clip/t5xxl_fp8_e4m3fn.safetensors && \
+      wget https://orchestration.civitai.com/v1/consumer/jobs/a469a316-9a0c-43eb-b765-9206fed329f3/assets/Khmer_Traditional_Clothing-000008.safetensors -O models/loras/Khmer_Traditional_Clothing-000008.safetensors && \
+      wget https://orchestration.civitai.com/v1/consumer/jobs/a469a316-9a0c-43eb-b765-9206fed329f3/assets/Khmer_Traditional_Clothing-000006.safetensors -O models/loras/Khmer_Traditional_Clothing-000006.safetensors; \
     elif [ "$MODEL_TYPE" = "sd3" ]; then \
       wget --header="Authorization: Bearer ${HUGGINGFACE_ACCESS_TOKEN}" -O models/checkpoints/sd3_medium_incl_clips_t5xxlfp8.safetensors https://huggingface.co/stabilityai/stable-diffusion-3-medium/resolve/main/sd3_medium_incl_clips_t5xxlfp8.safetensors; \
     fi
